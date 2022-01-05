@@ -23,7 +23,6 @@ export const getStory = async (req, res) => {
 
 //POST story (create)
 export const createStory = async (req, res) => {
-	// const story = req.body;
 	const { title, description, selectedFile, parent } = req.body;
 	const newStory = new StoryModel({ title, description, selectedFile, parent });
 	try {
@@ -34,6 +33,7 @@ export const createStory = async (req, res) => {
 	}
 };
 
+//PATCH (update) story
 export const updateStory = async (req, res) => {
 	const { id: _id } = req.params;
 	const story = req.body;
@@ -45,5 +45,17 @@ export const updateStory = async (req, res) => {
 		new: true,
 	});
 
-    res.json(updatedStory);
+	res.json(updatedStory);
+};
+
+//DELETE story
+export const deleteStory = async (req, res) => {
+	const { id } = req.params;
+
+	if (!mongoose.Types.ObjectId.isValid(id))
+		return res.status(404).send('Story does not exist');
+
+	await StoryModel.findByIdAndRemove(id);
+
+	res.json({ message: 'Deleted post' });
 };

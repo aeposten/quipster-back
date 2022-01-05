@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+//Creating story Schema
 const storySchema = mongoose.Schema({
 	title: String,
 	description: String,
@@ -15,6 +16,6 @@ const storySchema = mongoose.Schema({
 	},
 });
 
-
+//Exporting the schema
 const StoryModel = mongoose.model('StoryModel', storySchema)
 export default StoryModel;
