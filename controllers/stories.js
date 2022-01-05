@@ -48,6 +48,23 @@ export const updateStory = async (req, res) => {
 	res.json(updatedStory);
 };
 
+//PATCH (update) story by adding laughs
+export const addLaughs = async (req, res) => {
+	const { id } = req.params;
+
+	if (!mongoose.Types.ObjectId.isValid(id))
+		return res.status(404).send('Story does not exist');
+
+	const story = await StoryModel.findById(id);
+	const updatedStory = await StoryModel.findByIdAndUpdate(
+		id,
+		{ laughs: story.laughs + 1 },
+		{ new: true }
+	);
+
+	res.json(updatedStory);
+};
+
 //DELETE story
 export const deleteStory = async (req, res) => {
 	const { id } = req.params;

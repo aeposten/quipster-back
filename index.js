@@ -2,11 +2,15 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import dotenv from 'dotenv';
 import storiesRoutes from './routes/stories.js'
 
 
 //Using express for the app
 const app = express();
+
+//.env - seeeeeccccrrrreetttt
+dotenv.config();
 
 //5 mb limit for file uploads
 app.use(bodyParser.json({ limit: '5mb', extended: true }));
@@ -19,12 +23,9 @@ app.use(cors());
 app.use('/stories', storiesRoutes)
 
 //Mongoose server connection URL and Port
-const DB_URL =
-	'mongodb+srv://aeposten:5YewRMb4iZ4-wVy@little-quipster.qjehk.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
-const PORT = process.env.PORT || 5000;
-
+const PORT = process.env.PORT
 mongoose
-	.connect(DB_URL)
+	.connect(process.env.DB_URL)
 	.then(() =>
 		app.listen(PORT, () =>
 			console.log(`Success! Server running on port: ${PORT}`)
