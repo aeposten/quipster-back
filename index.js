@@ -4,6 +4,8 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import storiesRoutes from './routes/stories.js'
+import parentsRoutes from './routes/parents.js'
+
 
 
 //Using express for the app
@@ -22,6 +24,8 @@ app.use(cors());
 //Setting routes for stories
 app.use('/stories', storiesRoutes)
 
+//setting routes for parents
+app.use('/parent', parentsRoutes)
 
 //Mongoose server connection URL and Port
 const PORT = process.env.PORT

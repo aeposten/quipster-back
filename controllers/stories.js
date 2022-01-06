@@ -18,16 +18,25 @@ export const getStories = async (req, res) => {
 
 //GET story (one specific)
 export const getStory = async (req, res) => {
-	res.send('Response Sent!');
+    const { id } = req.params;
+
+    try {
+        const story = await StoryModel.findById(id);
+        
+        res.status(200).json(story);
+    } catch (error) {
+        res.status(404).json({ message: error.message });
+    }
 };
 
 //POST story (create)
 export const createStory = async (req, res) => {
-	const { title, description, selectedFile, parent } = req.body;
-	const newStory = new StoryModel({ title, description, selectedFile, parent });
+	const story = req.body;
+	const newStoryModel = new StoryModel({ ...story, writer: req.parentId, createdAt: new Date().toISOString() });
+	console.log(newStoryModel)
 	try {
-		await newStory.save();
-		res.status(201).json(newStory);
+		await newStoryModel.save();
+		res.status(201).json(newStoryModel);
 	} catch (error) {
 		res.status(409).json({ message: error.message });
 	}
@@ -51,14 +60,22 @@ export const updateStory = async (req, res) => {
 //PATCH (update) story by adding laughs
 export const addLaughs = async (req, res) => {
 	const { id } = req.params;
-
+	if (!req.parentId) return res.json({message: 'Not authenticated'})
 	if (!mongoose.Types.ObjectId.isValid(id))
 		return res.status(404).send('Story does not exist');
 
 	const story = await StoryModel.findById(id);
+
+	const index = story.laughs.findIndex((id)=> id === String(req.parentId))
+
+	if (index === -1 ) {
+		story.laughs.push(req.parentId)
+	} else {
+		story.laughs = story.laughs.filter((id) => id!== String(req.parentId))
+	}
 	const updatedStory = await StoryModel.findByIdAndUpdate(
 		id,
-		{ laughs: story.laughs + 1 },
+		story,
 		{ new: true }
 	);
 

@@ -4,11 +4,12 @@ import mongoose from 'mongoose';
 const storySchema = mongoose.Schema({
 	title: String,
 	description: String,
-	parent: String,
+	name: String,
+	writer: String,
 	selectedFile: String,
 	laughs: {
-		type: Number,
-		default: 0,
+		type: [String],
+		default: [],
 	},
 	createdAt: {
 		type: Date,
