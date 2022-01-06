@@ -71,7 +71,7 @@ export const addLaughs = async (req, res) => {
 	if (index === -1 ) {
 		story.laughs.push(req.parentId)
 	} else {
-		story.laughs = story.laughs.filter((id) => id!== String(req.parentId))
+		story.laughs = story.laughs.filter((id) => id !== String(req.parentId))
 	}
 	const updatedStory = await StoryModel.findByIdAndUpdate(
 		id,
@@ -79,7 +79,7 @@ export const addLaughs = async (req, res) => {
 		{ new: true }
 	);
 
-	res.json(updatedStory);
+	res.status(200).json(updatedStory);
 };
 
 //DELETE story
